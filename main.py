@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 from research_agent import ResearchAgent
+from enhanced_research_agent import EnhancedResearchAgent, ResearchRequest, conduct_research
 from web_search import EnhancedWebSearch
 from api_integrations import create_research_api_manager
 from citation_manager import CitationManager, CitationStyle
@@ -71,6 +72,7 @@ class ResearchAgentCLI:
         
         # Initialize components
         self.research_agent = ResearchAgent(config.get('research_agent2', {}))
+        self.enhanced_agent = EnhancedResearchAgent(config.get('research_agent2', {}))
         self.web_search = EnhancedWebSearch(config.get('web_search', {}))
         self.api_manager = create_research_api_manager(self._extract_api_keys())
         self.citation_manager = CitationManager()
@@ -89,41 +91,68 @@ class ResearchAgentCLI:
         
     async def conduct_research(self, query: str, options: Dict[str, Any]) -> Dict[str, Any]:
         """Conduct comprehensive research on a query."""
-        self.logger.info(f"Starting research on: {query}")
+        self.logger.info(f"Starting enhanced research on: {query}")
         
         try:
-            # Use the research agent to conduct research
-            result = await self.research_agent.conduct_research(query, options.get('context', {}))
+            # Create research request for enhanced agent
+            request = ResearchRequest(
+                query=query,
+                session_id=options.get('session_id', 'cli_session'),
+                research_type=options.get('research_type', 'comprehensive'),
+                max_sources=options.get('max_sources', 15),
+                preferred_citation_style=options.get('citation_style', 'apa'),
+                quality_threshold=options.get('quality_threshold', 0.6)
+            )
             
-            # Add citations for sources
-            citations = []
-            for source in result.sources:
-                citation = self.citation_manager.add_source(
-                    url=source.url,
-                    title=source.title,
-                    content=source.content,
-                    metadata={'source_type': source.source_type}
-                )
-                citations.append(citation.id)
-                
+            # Use enhanced research agent
+            result = await self.enhanced_agent.conduct_enhanced_research(request)
+            
             return {
-                'query': result.query.question,
-                'research_type': result.query.research_type.value,
-                'synthesis': result.synthesis,
-                'confidence_level': result.confidence_level,
-                'sources_found': len(result.sources),
-                'gaps_identified': result.gaps_identified,
-                'citations': citations,
-                'timestamp': result.timestamp.isoformat()
+                'query': query,
+                'response_type': result.get('response_type'),
+                'result': result,
+                'enhanced': True,
+                'timestamp': result.get('timestamp')
             }
             
         except Exception as e:
-            self.logger.error(f"Research failed: {e}")
-            return {
-                'error': str(e),
-                'query': query,
-                'timestamp': asyncio.get_event_loop().time()
-            }
+            self.logger.error(f"Enhanced research failed, falling back to basic agent: {e}")
+            
+            # Fallback to basic research agent
+            try:
+                result = await self.research_agent.conduct_research(query, options.get('context', {}))
+                
+                # Add citations for sources
+                citations = []
+                for source in result.sources:
+                    citation = self.citation_manager.add_source(
+                        url=source.url,
+                        title=source.title,
+                        content=source.content,
+                        metadata={'source_type': source.source_type}
+                    )
+                    citations.append(citation.id)
+                    
+                return {
+                    'query': result.query.question,
+                    'research_type': result.query.research_type.value,
+                    'synthesis': result.synthesis,
+                    'confidence_level': result.confidence_level,
+                    'sources_found': len(result.sources),
+                    'gaps_identified': result.gaps_identified,
+                    'citations': citations,
+                    'timestamp': result.timestamp.isoformat(),
+                    'enhanced': False
+                }
+                
+            except Exception as fallback_error:
+                self.logger.error(f"Both enhanced and basic research failed: {fallback_error}")
+                return {
+                    'error': str(fallback_error),
+                    'query': query,
+                    'timestamp': asyncio.get_event_loop().time(),
+                    'enhanced': False
+                }
             
     async def search_web(self, query: str, options: Dict[str, Any]) -> Dict[str, Any]:
         """Perform web search."""
@@ -228,16 +257,42 @@ class ResearchAgentCLI:
             return
             
         print(f"\nResearch Results for: {result['query']}")
-        print(f"Research Type: {result['research_type']}")
-        print(f"Confidence Level: {result['confidence_level']:.2f}")
-        print(f"Sources Found: {result['sources_found']}")
-        print(f"\nSynthesis:")
-        print(result['synthesis'])
+        print(f"Enhanced Mode: {'Yes' if result.get('enhanced') else 'No'}")
         
-        if result['gaps_identified']:
-            print(f"\nInformation Gaps:")
-            for gap in result['gaps_identified']:
-                print(f"  - {gap}")
+        if result.get('enhanced') and result.get('result'):
+            # Enhanced result format
+            enhanced_result = result['result']
+            print(f"Response Type: {enhanced_result.get('response_type', 'Unknown')}")
+            
+            if enhanced_result.get('response_type') == 'detailed_analysis':
+                methodology = enhanced_result.get('methodology', {})
+                print(f"Research Approach: {methodology.get('approach', 'Standard')}")
+                
+                sources = enhanced_result.get('sources', {})
+                print(f"Sources Analyzed: {sources.get('methodology', {}).get('total_sources_reviewed', 0)}")
+                
+                findings = enhanced_result.get('detailed_findings', {})
+                if isinstance(findings, dict) and 'primary_synthesis' in findings:
+                    print(f"\nSynthesis:")
+                    print(findings['primary_synthesis'])
+                    print(f"Confidence: {findings.get('confidence_level', 0):.2f}")
+                    
+        else:
+            # Basic result format
+            if 'research_type' in result:
+                print(f"Research Type: {result['research_type']}")
+            if 'confidence_level' in result:
+                print(f"Confidence Level: {result['confidence_level']:.2f}")
+            if 'sources_found' in result:
+                print(f"Sources Found: {result['sources_found']}")
+            if 'synthesis' in result:
+                print(f"\nSynthesis:")
+                print(result['synthesis'])
+            
+            if result.get('gaps_identified'):
+                print(f"\nInformation Gaps:")
+                for gap in result['gaps_identified']:
+                    print(f"  - {gap}")
                 
     def _print_search_result(self, result: Dict[str, Any]):
         """Print search result in formatted way."""
