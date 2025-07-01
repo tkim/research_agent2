@@ -1,7 +1,7 @@
 """
-Research Agent - An intelligent assistant for conducting thorough research and analysis.
+Research Agent 2 - An intelligent assistant for conducting thorough research and analysis.
 
-This module provides the core Research Agent class with capabilities for web search,
+This module provides the core Research Agent 2 class with capabilities for web search,
 information gathering, research methodology, and API integration.
 """
 
@@ -74,7 +74,7 @@ class ResearchAgent:
         
     def _setup_logging(self) -> logging.Logger:
         """Set up logging for the research agent."""
-        logger = logging.getLogger("research_agent")
+        logger = logging.getLogger("research_agent2")
         logger.setLevel(logging.INFO)
         
         if not logger.handlers:
@@ -423,7 +423,7 @@ class ResearchAgent:
 
 # Example usage and testing functions
 def main():
-    """Example usage of the Research Agent."""
+    """Example usage of the Research Agent 2."""
     # Initialize agent
     config = {
         # Add your API keys here

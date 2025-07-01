@@ -16,18 +16,18 @@ def read_requirements():
         return [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
 setup(
-    name="research-agent",
+    name="research-agent2",
     version="1.0.0",
     description="An intelligent assistant for conducting thorough research and analysis",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     author="Research Agent Team",
     author_email="contact@research-agent.com",
-    url="https://github.com/tkim/research_agent",
+    url="https://github.com/tkim/research_agent2",
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        'research_agent': ['config.json'],
+        'research_agent2': ['config.json'],
     },
     install_requires=read_requirements(),
     extras_require={
@@ -46,7 +46,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'research-agent=main:main',
+            'research-agent2=main:main',
         ],
     },
     classifiers=[
@@ -68,8 +68,8 @@ setup(
     python_requires=">=3.7",
     keywords="research, web-search, citations, analysis, academic, information-retrieval",
     project_urls={
-        "Bug Reports": "https://github.com/tkim/research_agent/issues",
-        "Source": "https://github.com/tkim/research_agent",
-        "Documentation": "https://github.com/tkim/research_agent/wiki",
+        "Bug Reports": "https://github.com/tkim/research_agent2/issues",
+        "Source": "https://github.com/tkim/research_agent2",
+        "Documentation": "https://github.com/tkim/research_agent2/wiki",
     },
 )

@@ -1,4 +1,4 @@
-# Research Agent
+# Research Agent 2
 
 An intelligent assistant designed to conduct thorough research and analysis using web search capabilities and various APIs. The Research Agent operates locally on your system and is designed to be helpful, accurate, and efficient while respecting computational limitations.
 
@@ -41,8 +41,8 @@ An intelligent assistant designed to conduct thorough research and analysis usin
 
 ```bash
 # Clone the repository
-git clone https://github.com/tkim/research_agent.git
-cd research_agent
+git clone https://github.com/tkim/research_agent2.git
+cd research_agent2
 
 # Install dependencies
 pip install -r requirements.txt
@@ -239,11 +239,11 @@ pip install -e ".[dev]"
 pytest
 
 # Run linting
-flake8 research_agent/
-black research_agent/
+flake8 research_agent2/
+black research_agent2/
 
 # Type checking
-mypy research_agent/
+mypy research_agent2/
 ```
 
 ## License
@@ -268,9 +268,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For support, please:
-1. Check the [documentation](https://github.com/tkim/research_agent/wiki)
-2. Search [existing issues](https://github.com/tkim/research_agent/issues)
-3. Create a [new issue](https://github.com/tkim/research_agent/issues/new) if needed
+1. Check the [documentation](https://github.com/tkim/research_agent2/wiki)
+2. Search [existing issues](https://github.com/tkim/research_agent2/issues)
+3. Create a [new issue](https://github.com/tkim/research_agent2/issues/new) if needed
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "research_agent": {
+  "research_agent2": {
     "default_search_engines": ["duckduckgo", "google", "bing"],
     "max_search_results": 20,
     "default_citation_style": "apa",
@@ -9,7 +9,7 @@
     "max_concurrent_requests": 5
   },
   "web_search": {
-    "user_agent": "ResearchAgent/1.0 (Educational Research Tool)",
+    "user_agent": "ResearchAgent2/1.0 (Educational Research Tool)",
     "respect_robots_txt": true,
     "rate_limit": {
       "requests_per_second": 1,
@@ -38,7 +38,7 @@
       "base_url": "https://en.wikipedia.org/api/rest_v1/",
       "auth_type": "none",
       "headers": {
-        "User-Agent": "ResearchAgent/1.0"
+        "User-Agent": "ResearchAgent2/1.0"
       },
       "rate_limit": {
         "requests_per_second": 1
@@ -84,6 +84,6 @@
     "level": "INFO",
     "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     "handlers": ["console", "file"],
-    "file_path": "research_agent.log"
+    "file_path": "research_agent2.log"
   }
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Research Agent - Main Entry Point
+Research Agent 2 - Main Entry Point
 
-This is the main script for running the Research Agent system.
+This is the main script for running the Research Agent 2 system.
 It provides a command-line interface for conducting research operations.
 """
 
@@ -70,7 +70,7 @@ class ResearchAgentCLI:
         self.logger = logging.getLogger(f"{__name__}.ResearchAgentCLI")
         
         # Initialize components
-        self.research_agent = ResearchAgent(config.get('research_agent', {}))
+        self.research_agent = ResearchAgent(config.get('research_agent2', {}))
         self.web_search = EnhancedWebSearch(config.get('web_search', {}))
         self.api_manager = create_research_api_manager(self._extract_api_keys())
         self.citation_manager = CitationManager()
@@ -174,7 +174,7 @@ class ResearchAgentCLI:
             
     async def interactive_mode(self):
         """Run in interactive mode."""
-        print("Research Agent - Interactive Mode")
+        print("Research Agent 2 - Interactive Mode")
         print("Commands: research <query>, search <query>, bibliography, export, quit")
         print("-" * 60)
         
@@ -259,7 +259,7 @@ class ResearchAgentCLI:
 async def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="Research Agent - Intelligent Research Assistant",
+        description="Research Agent 2 - Intelligent Research Assistant",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
