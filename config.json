@@ -1,0 +1,89 @@
+{
+  "research_agent": {
+    "default_search_engines": ["duckduckgo", "google", "bing"],
+    "max_search_results": 20,
+    "default_citation_style": "apa",
+    "cache_enabled": true,
+    "cache_ttl": 3600,
+    "request_timeout": 30,
+    "max_concurrent_requests": 5
+  },
+  "web_search": {
+    "user_agent": "ResearchAgent/1.0 (Educational Research Tool)",
+    "respect_robots_txt": true,
+    "rate_limit": {
+      "requests_per_second": 1,
+      "requests_per_minute": 30
+    }
+  },
+  "apis": {
+    "newsapi": {
+      "base_url": "https://newsapi.org/v2/",
+      "auth_type": "api_key",
+      "auth_config": {
+        "key_name": "X-API-Key",
+        "api_key": ""
+      },
+      "rate_limit": {
+        "requests_per_hour": 1000
+      },
+      "timeout": 30,
+      "retry_config": {
+        "max_retries": 3,
+        "backoff_factor": 1.0,
+        "retry_statuses": [429, 500, 502, 503, 504]
+      }
+    },
+    "wikipedia": {
+      "base_url": "https://en.wikipedia.org/api/rest_v1/",
+      "auth_type": "none",
+      "headers": {
+        "User-Agent": "ResearchAgent/1.0"
+      },
+      "rate_limit": {
+        "requests_per_second": 1
+      },
+      "timeout": 15
+    },
+    "arxiv": {
+      "base_url": "http://export.arxiv.org/api/",
+      "auth_type": "none",
+      "rate_limit": {
+        "requests_per_second": 0.5
+      },
+      "timeout": 20
+    }
+  },
+  "source_credibility": {
+    "high_credibility_domains": [
+      "edu",
+      "gov",
+      "wikipedia.org",
+      "scholar.google.com",
+      "pubmed.ncbi.nlm.nih.gov",
+      "arxiv.org",
+      "nature.com",
+      "science.org",
+      "ieee.org",
+      "acm.org"
+    ],
+    "news_domains": [
+      "bbc.com",
+      "reuters.com",
+      "nytimes.com",
+      "washingtonpost.com",
+      "npr.org"
+    ],
+    "bias_indicators": {
+      "strong_language": ["amazing", "incredible", "shocking", "devastating"],
+      "emotional_appeals": ["you must", "everyone knows", "obviously"],
+      "absolute_statements": ["always", "never", "all", "none", "every"]
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "handlers": ["console", "file"],
+    "file_path": "research_agent.log"
+  }
+}
