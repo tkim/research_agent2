@@ -1,0 +1,31 @@
+QUICK START FOR WINDOWS 11
+==========================
+
+The issue you're experiencing is because you're trying to run the batch file directly from WSL (Windows Subsystem for Linux). 
+Windows CMD cannot use WSL paths as working directories.
+
+SOLUTION - Choose one of these options:
+
+Option 1: Use PowerShell (Recommended)
+--------------------------------------
+1. Open PowerShell as Administrator
+2. Run this command:
+   Copy-Item -Path "\\wsl.localhost\Ubuntu\home\tkim\github\research_agent2" -Destination "$env:USERPROFILE\Documents\research_agent2" -Recurse -Force; cd "$env:USERPROFILE\Documents\research_agent2"; .\run_research_agent.bat
+
+Option 2: Manual Copy
+--------------------
+1. Open File Explorer
+2. Navigate to: \\wsl.localhost\Ubuntu\home\tkim\github\research_agent2
+3. Copy the entire "research_agent2" folder
+4. Paste it to: C:\Users\YourUsername\Documents\
+5. Open the copied folder and double-click "run_research_agent.bat"
+
+Option 3: Use the Setup Script
+------------------------------
+1. Open PowerShell
+2. Navigate to the WSL path: cd \\wsl.localhost\Ubuntu\home\tkim\github\research_agent2
+3. Run: powershell -ExecutionPolicy Bypass -File setup_windows.ps1
+
+After copying to Windows, the batch file will work correctly because it will be on a regular Windows drive (C:\) instead of a WSL network path.
+
+IMPORTANT: Always run the batch file from a Windows location (like C:\Users\YourUsername\Documents\research_agent2), not from the WSL path.
